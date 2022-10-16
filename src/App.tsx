@@ -1,49 +1,34 @@
 import "./App.scss";
-import React from "react";
-import { CompaniesList, ExperiencesList } from "data";
-import { CompanyFilter } from "components";
+import React, { useRef } from "react";
+import { CompaniesList } from "data";
+import { BlogList, CompanyFilter, FooterLinks, Header } from "components";
+import { initResizeEventListener } from "hooks";
+import { useRecoilValue } from "recoil";
+import { filteredExperiencesState } from "recoil/selectors";
 
 export const App = (): React.ReactElement => {
+  const asideRef = useRef<HTMLElement>();
+  const filteredExperiences = useRecoilValue(filteredExperiencesState);
+
+  initResizeEventListener()(asideRef);
+
   return (
     <div className="container">
       <header>
-        <h1 className="heading-1">Interview Experiences</h1>
+        <Header />
       </header>
 
       <main>
-        <ul className="list">
-          {ExperiencesList.map(({ _id, author, blog }) => (
-            <li className="list-item" key={_id}>
-              <h2 className="heading-2">
-                <a
-                  href={blog.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link"
-                >
-                  {blog.heading}
-                </a>
-              </h2>
-
-              <p className="author-para">
-                <strong>Author :</strong>
-                <a
-                  href={author.profile}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link profile-link"
-                >
-                  {author.name}
-                </a>
-              </p>
-            </li>
-          ))}
-        </ul>
+        <BlogList filteredExperiences={filteredExperiences} />
       </main>
 
-      <aside>
+      <aside ref={asideRef}>
         <CompanyFilter companies={CompaniesList} />
       </aside>
+
+      <footer>
+        <FooterLinks />
+      </footer>
     </div>
   );
 };
