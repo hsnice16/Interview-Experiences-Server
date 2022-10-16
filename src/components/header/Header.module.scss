@@ -1,0 +1,6 @@
+@use "styles/variables";
+
+.heading {
+  color: variables.$text-color-700;
+  font-size: 6rem;
+}
